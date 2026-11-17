@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bizzy — Chat y negocios en un solo lugar</title>
+  <link rel="icon" type="image/png" href="logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #090D16;
+      --surface: #111827;
+      --surface-elevated: #1F2937;
+      --cyan: #00F2FE;
+      --cyan-glow: rgba(0, 242, 254, 0.35);
+      --text: #F8FAFC;
+      --text-muted: #94A3B8;
+      --border: rgba(255, 255, 255, 0.08);
+      --gradient-cyan: linear-gradient(135deg, #00F2FE 0%, #4FACFE 100%);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ambient Glows */
+    .glow-top {
+      position: absolute;
+      top: -120px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(0, 242, 254, 0.15) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Navbar */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+      filter: drop-shadow(0 0 12px var(--cyan-glow));
+    }
+
+    .brand-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+
+    .badge-version {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 8px;
+      background: rgba(0, 242, 254, 0.12);
+      color: var(--cyan);
+      border-radius: 999px;
+      border: 1px solid rgba(0, 242, 254, 0.25);
+    }
+
+    .nav-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      background: var(--surface-elevated);
+      border-color: rgba(0, 242, 254, 0.3);
+      color: var(--cyan);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 60px 0 30px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: clamp(38px, 6.5vw, 60px);
+      font-weight: 800;
+      line-height: 1.15;
+      letter-spacing: -1.2px;
+      max-width: 800px;
+      margin: 0 auto 20px;
+    }
+
+    .hero h1 span {
+      background: var(--gradient-cyan);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      font-size: clamp(16px, 2.5vw, 19px);
+      color: var(--text-muted);
+      max-width: 660px;
+      margin: 0 auto 36px;
+      font-weight: 500;
+    }
+
+    /* CTA Button */
+    .cta-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .btn-download-hero {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: var(--gradient-cyan);
+      color: #070B13;
+      padding: 18px 38px;
+      border-radius: 16px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 17px;
+      font-weight: 800;
+      text-decoration: none;
+      box-shadow: 0 10px 30px var(--cyan-glow);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-download-hero:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 40px rgba(0, 242, 254, 0.5);
+    }
+
+    .meta-download {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .meta-download span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* 3-Phone Showcase */
+    .showcase-container {
+      margin: 60px auto 70px;
+      position: relative;
+    }
+
+    .showcase-grid {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      perspective: 1200px;
+    }
+
+    .phone-item {
+      flex: 1;
+      max-width: 310px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .phone-item.side {
+      opacity: 0.90;
+      transform: scale(0.94);
+    }
+
+    .phone-item.side:hover {
+      opacity: 1;
+      transform: scale(0.98);
+    }
+
+    .phone-item.main {
+      max-width: 335px;
+      z-index: 2;
+      transform: scale(1.05);
+    }
+
+    .phone-frame {
+      background: #000;
+      border-radius: 36px;
+      padding: 9px;
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.85);
+      position: relative;
+    }
+
+    .phone-item.main .phone-frame {
+      border-color: rgba(0, 242, 254, 0.6);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.9), 0 0 35px rgba(0, 242, 254, 0.25);
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 26px;
+      object-fit: cover;
+    }
+
+    .phone-caption {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.3px;
+    }
+
+    .phone-item.main .phone-caption {
+      color: var(--cyan);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    @media (max-width: 880px) {
+      .showcase-grid {
+        flex-direction: row;
+        overflow-x: auto;
+        padding: 20px 10px;
+        justify-content: flex-start;
+        scroll-snap-type: x mandatory;
+        gap: 16px;
+        -webkit-overflow-scrolling: touch;
+      }
+      .phone-item {
+        flex: 0 0 270px;
+        max-width: 270px;
+        scroll-snap-align: center;
+      }
+      .phone-item.side {
+        transform: scale(1);
+        opacity: 1;
+      }
+      .phone-item.main {
+        transform: scale(1);
+        max-width: 270px;
+      }
+    }
+
+    /* Features Grid */
+    .features-section {
+      padding: 60px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .section-head {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 50px;
+    }
+
+    .section-head h2 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      letter-spacing: -0.6px;
+    }
+
+    .section-head p {
+      color: var(--text-muted);
+      font-size: 16px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .card-feature {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 26px;
+      transition: all 0.2s ease;
+    }
+
+    .card-feature:hover {
+      border-color: rgba(0, 242, 254, 0.35);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .feat-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: rgba(0, 242, 254, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      margin-bottom: 18px;
+      border: 1px solid rgba(0, 242, 254, 0.2);
+    }
+
+    .card-feature h3 {
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .card-feature p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Steps Section */
+    .steps-section {
+      padding: 60px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .step-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 24px;
+      position: relative;
+    }
+
+    .step-num {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--cyan);
+      color: #070B13;
+      font-weight: 800;
+      font-size: 14px;
+      text-align: center;
+      line-height: 32px;
+      margin-bottom: 14px;
+    }
+
+    .step-box h4 {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .step-box p {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* FAQ */
+    .faq-section {
+      padding: 60px 0 80px;
+      border-top: 1px solid var(--border);
+    }
+
+    .faq-list {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .faq-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 24px;
+    }
+
+    .faq-item h4 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .faq-item p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+    }
+
+    footer a {
+      color: var(--cyan);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="glow-top"></div>
+
+  <div class="container">
+    <!-- Navbar -->
+    <nav>
+      <a href="#" class="brand">
+        <img src="logo.png" alt="Bizzy Logo">
+        <span class="brand-title">Bizzy</span>
+        <span class="badge-version">v1.0.5</span>
+      </a>
+      <a href="https://github.com/mariolabelino-jpg/aura-app-releases/releases/latest/download/AuraChat.apk" class="nav-btn">
+        <span>📥</span> Descargar APK
+      </a>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+      <h1>Chat y negocios en <span>un solo lugar</span></h1>
+      <p>La plataforma donde personas reales pactan servicios, colaboraciones y acuerdos directamente, <strong style="color: var(--cyan); font-weight: 800; letter-spacing: 0.5px;">SIN INTERMEDIARIOS</strong> ni comisiones abusivas.</p>
+
+      <div class="cta-group">
+        <a href="https://github.com/mariolabelino-jpg/aura-app-releases/releases/latest/download/AuraChat.apk" class="btn-download-hero">
+          <span>📥</span> Descargar Bizzy APK (v1.0.5)
+        </a>
+        <div class="meta-download">
+          <span>🛡️ 100% Libre de Virus</span>
+          <span>•</span>
+          <span>⚡ Descarga Directa (~75 MB)</span>
+          <span>•</span>
+          <span>🤖 Android 8.0+</span>
+        </div>
+      </div>
+
+      <!-- 3-Phone Showcase con las Capturas Reales -->
+      <div class="showcase-container">
+        <div class="showcase-grid">
+          
+          <!-- Teléfono 1: Explorar -->
+          <div class="phone-item side">
+            <div class="phone-frame">
+              <img src="shot_explorar.jpg" alt="Explorar Comunidad en Bizzy" class="phone-screen">
+            </div>
+            <div class="phone-caption">🔍 Explorar Comunidad</div>
+          </div>
+
+          <!-- Teléfono 2: Muro de Anuncios (Principal Destacado) -->
+          <div class="phone-item main">
+            <div class="phone-frame">
+              <img src="shot_muro.jpg" alt="Muro de Anuncios y Tarifas en Bizzy" class="phone-screen">
+            </div>
+            <div class="phone-caption">🪙 Muro de Servicios & Tarifas</div>
+          </div>
+
+          <!-- Teléfono 3: Chats -->
+          <div class="phone-item side">
+            <div class="phone-frame">
+              <img src="shot_chats.jpg" alt="Chats y Mensajería Privada en Bizzy" class="phone-screen">
+            </div>
+            <div class="phone-caption">💬 Chats & Mensajes Directos</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="features-section">
+      <div class="section-head">
+        <h2>Diseñado para acuerdos reales</h2>
+        <p>Todo lo que necesitas para publicar, negociar y cerrar tratos con total confianza.</p>
+      </div>
+
+      <div class="grid-4">
+        <div class="card-feature">
+          <div class="feat-icon">🪙</div>
+          <h3>Muro de Anuncios</h3>
+          <p>Publica tus habilidades o busca servicios en tu ciudad. Filtra por categorías como UGC, Gaming, Salidas o Asesorías con tarifas en soles.</p>
+        </div>
+
+        <div class="card-feature">
+          <div class="feat-icon">🔒</div>
+          <h3>Chat P2P Encriptado</h3>
+          <p>Comunicación privada protegida. Tus conversaciones y acuerdos viajan encriptados bajo protocolos seguros de punto a punto, garantizando que nadie fuera del chat tenga acceso a tus mensajes.</p>
+        </div>
+
+        <div class="card-feature">
+          <div class="feat-icon">⭐</div>
+          <h3>Reputación Verificada</h3>
+          <p>Calificaciones y reseñas auténticas. Conoce de antemano el historial y las estrellas de la persona con la que vas a hacer negocios.</p>
+        </div>
+
+        <div class="card-feature">
+          <div class="feat-icon">🚫</div>
+          <h3>Cero Comisiones</h3>
+          <p>Bizzy no se queda con un solo centavo de tus ingresos. El precio pactado es 100% tuyo y se paga por el medio que ambos elijan.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Guía de Instalación -->
+    <section class="steps-section">
+      <div class="section-head">
+        <h2>Cómo instalar Bizzy en 3 pasos</h2>
+        <p>Al ser una descarga directa e independiente, Android te pedirá una confirmación de seguridad estándar.</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-box">
+          <span class="step-num">1</span>
+          <h4>Descarga el archivo APK</h4>
+          <p>Presiona el botón de descarga arriba. El archivo <code>AuraChat.apk</code> empezará a descargarse de inmediato.</p>
+        </div>
+        <div class="step-box">
+          <span class="step-num">2</span>
+          <h4>Autoriza la instalación</h4>
+          <p>Si tu navegador te pregunta <em>"¿Descargar de todos modos?"</em> o <em>"Permitir desde esta fuente"</em>, pulsa <strong>Aceptar</strong>.</p>
+        </div>
+        <div class="step-box">
+          <span class="step-num">3</span>
+          <h4>Abre y Conéctate</h4>
+          <p>Toca el archivo descargado para instalarlo. Inicia sesión con tu cuenta de Google y empieza a descubrir tratos.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section">
+      <div class="section-head">
+        <h2>Preguntas Frecuentes</h2>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <h4>¿Por qué se descarga por APK y no por la Play Store?</h4>
+          <p>Bizzy se distribuye de forma directa para mantener la plataforma 100% libre de las comisiones del 30% de las tiendas tradicionales y permitir actualizaciones ágiles sin intermediarios.</p>
+        </div>
+        <div class="faq-item">
+          <h4>¿Es seguro instalar el archivo? ¿Cómo compruebo que no tiene virus?</h4>
+          <p>Es 100% seguro y libre de malware. Te invitamos a comprobarlo tú mismo antes de instalarlo: puedes subir el archivo APK a cualquier antivirus o a <a href="https://www.virustotal.com/gui/home/upload" target="_blank" style="color: var(--cyan); font-weight: 700; text-decoration: underline;">VirusTotal</a> (el servicio de Google que analiza el archivo con más de 70 motores antivirus como Kaspersky, ESET, Avast y Microsoft Defender), donde comprobarás que el resultado es 0 alertas.</p>
+        </div>
+        <div class="faq-item">
+          <h4>¿Tiene algún costo registrarse o publicar?</h4>
+          <p>No. Bizzy es completamente gratuita para descargar, registrarse, publicar en el Muro y chatear con otros usuarios.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <p>Bizzy © 2026 • <strong>Chat y negocios en un solo lugar</strong></p>
+      <p style="margin-top: 8px;">
+        Versión actual: <span style="color: var(--cyan);">v1.0.5 (Build 5)</span> • 
+        Repositorio oficial: <a href="https://github.com/mariolabelino-jpg/aura-app-releases" target="_blank">mariolabelino-jpg/aura-app-releases</a>
+      </p>
+    </footer>
+  </div>
+
+</body>
+</html>
